@@ -13,7 +13,6 @@ class Server:
     # METHOD TO CONNECT TO SQL SERVER
     def connect_to_server(self):
         try:
-            print(self.server,self.database,self.username,self.password)
             cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};\
                                 SERVER='+self.server+';\
                                 DATABASE='+self.database+';\
@@ -21,7 +20,8 @@ class Server:
                                 PWD='+ self.password)
             self.cursor = cnxn.cursor()
             print("Connection to database is successful!")
-        except:
+        except Exception as e:
+            print(e)
             print("Problem while connecting to database!")
         # finally:
         #     self.cursor.close()
