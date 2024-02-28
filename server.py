@@ -1,4 +1,5 @@
 import pyodbc
+import pymssql
 import os
 from dotenv import load_dotenv
 
@@ -12,13 +13,13 @@ class Server:
 
     # METHOD TO CONNECT TO SQL SERVER
     def connect_to_server(self):
-        print(pyodbc.drivers())
         try:
-            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};\
-                                SERVER='+self.server+';\
-                                DATABASE='+self.database+';\
-                                UID='+self.username+';\
-                                PWD='+ self.password)
+            # cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};\
+            #                     SERVER='+self.server+';\
+            #                     DATABASE='+self.database+';\
+            #                     UID='+self.username+';\
+            #                     PWD='+ self.password)
+            cnxn=pymssql.connect(self.server,self.username,self.password,self.database,autocommit=True)
             self.cursor = cnxn.cursor()
             print("Connection to database is successful!")
         except Exception as e:
@@ -34,7 +35,7 @@ class Server:
             # self.connect_to_server()
             query=f"insert into task_manager values ({task['task_id']},{task['user_id']},'{task['title']}','{task['description']}','{task['due_date']}','{task['status']}')"
             
-            self.cursor.execute(query).commit()
+            self.cursor.execute(query)
             return {"message":"success"}
         except Exception as e:
             return {"message":str(e)}
@@ -62,7 +63,8 @@ class Server:
             # self.connect_to_server()
             query=f"select * from task_manager where task_id={task_id}"
 
-            data=self.cursor.execute(query).fetchone()
+            self.cursor.execute(query)
+            data=self.cursor.fetchone()
             cname= [column[0] for column in self.cursor.description]
             result=[dict(zip(cname,data))]
             return result
@@ -77,7 +79,7 @@ class Server:
             # self.connect_to_server()     
             query=f"update task_manager set title='{updated_task['title']}',description='{updated_task['description']}',due_date='{updated_task['due_date']}',status='{updated_task['status']}' where task_id={task_id}"
 
-            self.cursor.execute(query).commit()
+            self.cursor.execute(query)
             return {"message":"success"}
         except Exception as e:
             return {"message":str(e)}
@@ -90,7 +92,7 @@ class Server:
             # self.connect_to_server()
             query=f"delete from task_manager where task_id={task_id}"
 
-            self.cursor.execute(query).commit()
+            self.cursor.execute(query)
             return {"message":"success"}
         except Exception as e:
             return {"message":str(e)}
@@ -104,7 +106,7 @@ class Server:
             # self.connect_to_server()
             query=f"insert into user_data values({user['userid']},'{user['name']}','{user['domain']}','{user['password']}')"
 
-            self.cursor.execute(query).commit()
+            self.cursor.execute(query)
             return {"message":"success"}
         except Exception as e:
             return {"message":str(e)}
@@ -117,7 +119,8 @@ class Server:
             # self.connect_to_server()
             query=f"select * from user_data where user_id={user_id}"
 
-            data=self.cursor.execute(query).fetchone()
+            self.cursor.execute(query)
+            data=self.cursor.fetchone()
             cname= [column[0] for column in self.cursor.description]
             result=[dict(zip(cname,data))]
             return result
@@ -160,7 +163,8 @@ class Server:
             # self.connect_to_server()
             query=f"select * from task_manager t join user_data u on t.user_id=u.user_id where t.user_id={user_id}"
             
-            tasks=self.cursor.execute(query).fetchall()
+            self.cursor.execute(query)
+            tasks=self.cursor.fetchall()
             cname= [column[0] for column in self.cursor.description]
             result=[dict(zip(cname,result)) for result in tasks]
             return {"tasks":result}
