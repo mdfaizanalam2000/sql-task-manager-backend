@@ -1,5 +1,4 @@
 fastapi
-pyodbc
 python-dotenv
 uvicorn
 pymssql
