@@ -12,6 +12,7 @@ class Server:
 
     # METHOD TO CONNECT TO SQL SERVER
     def connect_to_server(self):
+        print(pyodbc.drivers())
         try:
             cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};\
                                 SERVER='+self.server+';\
