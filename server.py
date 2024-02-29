@@ -100,7 +100,7 @@ class Server:
         try:
             # self.connect_to_server()
             query=f"insert into user_data values({user['userid']},'{user['name']}','{user['domain']}','{user['password']}')"
-
+            
             self.cursor.execute(query)
             return {"message":"success"}
         except Exception as e:
@@ -148,6 +148,19 @@ class Server:
 
             self.cursor.execute(query)
             return {"message":"success, user updated!"}
+        except Exception as e:
+            return {"message":str(e)}
+        # finally:
+        #     self.cursor.close()
+        #     print("Connection closed securely!")
+
+    def deleteUserByID(self,user_id):
+        try:          
+            # self.connect_to_server()
+            query=f"delete from user_data where user_id={user_id}"
+
+            self.cursor.execute(query)
+            return {"message":"success"}
         except Exception as e:
             return {"message":str(e)}
         # finally:

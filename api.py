@@ -67,6 +67,11 @@ def root():
 def root(user_id:int,updated_user=Body()):
    res=server.updateUserByID(user_id,json.loads(updated_user))
    return res
+
+@app.delete("/deleteUser")
+def root(user_id:int):
+   res=server.deleteUserByID(user_id)
+   return res
     
 # API ROUTE TO FIND ALL TASKS OF A PARTICULAR USER
 @app.get("/getAllTasksByUser")
