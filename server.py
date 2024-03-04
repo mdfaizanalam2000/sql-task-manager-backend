@@ -144,7 +144,7 @@ class Server:
     def updateUserByID(self,user_id,updated_user):
         try:          
             # self.connect_to_server()
-            query=f"update user_data set name='{updated_user['name']}',domain='{updated_user['domain']}, password='{updated_user['new_password']}' where user_id={user_id}"
+            query=f"update user_data set name='{updated_user['name']}',domain='{updated_user['domain']}', password='{updated_user['new_password']}' where user_id={user_id}"
             
             self.cursor.execute(query)
             return {"message":"success"}
